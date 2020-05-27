@@ -99,7 +99,7 @@ class UsersController extends Controller
         $user->loadRelationshipCounts();
 
         // ユーザのお気に入り投稿一覧を取得
-        $microposts = $user->feed_favorites()->orderBy('created_at', 'desc')->paginate(10);
+        $microposts = $user->favorites()->orderBy('created_at', 'desc')->paginate(10);
         
         //dd($favorites);
         // フォロワー一覧ビューでそれらを表示

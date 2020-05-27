@@ -37,6 +37,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
     
+    /* リレーションの定義 */
     public function microposts()
     {
         return $this->hasMany(Micropost::class);
@@ -63,9 +64,11 @@ class User extends Authenticatable
      */
     public function favorites()
     {
-        return $this->belongsToMany(User::class, 'favorites', 'user_id', 'micropost_id')->withTimestamps();
+        return $this->belongsToMany(Micropost::class, 'favorites', 'user_id', 'micropost_id')->withTimestamps();
     }
-
+    
+    /* リレーションの定義 fin  */
+    
     
     /**
      * $userIdで指定されたユーザをフォローする。
@@ -205,9 +208,13 @@ class User extends Authenticatable
         return Micropost::whereIn('user_id', $userIds);
     }
     
-     /**
+    /**
+     * これは不要だった。 Controllerからは
+     * 単に上記のfavorites()を使い、
+     * Auth::user()->favorites()->paginate() もしくは ->get() と記述すれば良い
+     * 
      * このユーザのお気に入り一覧を取得する。
-     */
+     
     public function feed_favorites()
     {
         $micropostIds = $this->favorites()->pluck('favorites.micropost_id')->toArray();
@@ -218,4 +225,5 @@ class User extends Authenticatable
         // それらのユーザが所有する投稿に絞り込む
         return Micropost::whereIn('id', $micropostIds);
     }
+    */
 }
